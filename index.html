@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // Randomizes computerSelection.
+      // Returns rock, paper, or scissors
+      let playerWins;
+      let computerWins;
+
+      let computerPlay = () => {
+        let randomInt = Math.floor(Math.random() * 3);
+        switch (randomInt) {
+          case 0:
+            return 'rock';
+          case 1:
+            return 'paper';
+          case 2:
+            return 'scissors';
+        }
+      };
+
+      // Takes in user input & randomized computer input.
+      // Returns the winner.
+      let getWinner = (playerSelection, computerSelection) => {
+        playerSelection = playerSelection.toLowerCase();
+        let winner;
+        if (playerSelection == 'rock') {
+          switch (computerSelection) {
+            case 'rock':
+              winner = 'tie';
+              break;
+            case 'paper':
+              winner = 'computer';
+              break;
+            case 'scissors':
+              winner = 'player';
+              break;
+          }
+        }
+        if (playerSelection == 'paper') {
+          switch (computerSelection) {
+            case 'rock':
+              winner = 'player';
+              break;
+            case 'paper':
+              winner = 'tie';
+              break;
+            case 'scissors':
+              winner = 'computer';
+              break;
+          }
+          if (playerSelection == 'scissors') {
+            switch (computerSelection) {
+              case 'rock':
+                winner = 'computer';
+                break;
+              case 'paper':
+                winner = 'player';
+                break;
+              case 'scissors':
+                winner = 'tie';
+                break;
+            }
+          }
+        }
+        return announceWinner(playerSelection, computerSelection, winner);
+      };
+
+      // Takes in both selections and the winner.
+      // Returns winner in console.
+      let announceWinner = (playerSelection, computerSelection, winner) => {
+        if (winner == 'player') {
+          console.log(
+            `You win, ${playerSelection} beats ${computerSelection}.`
+          );
+          return playerWins++;
+        }
+        if (winner == 'computer') {
+          console.log(
+            `You lose, ${computerSelection} beats ${playerSelection}.`
+          );
+          return computerWins++;
+        }
+        if (winner == 'tie') {
+          console.log("It's a tie!");
+        } else console.log("That's not a rock, a paper, or a scissors...");
+      };
+
+      let game = () => {
+        playerWins = 0;
+        computerWins = 0;
+        while (playerWins < 3 && computerWins < 3) {
+          getWinner(prompt('Rock, Paper, or Scissors?'), computerPlay());
+          console.log(
+            `You have ${playerWins} wins and the computer has ${computerWins}.`
+          );
+        }
+        if ((playerWins = 3)) {
+          console.log("Great work, you've won a pointless game.");
+        } else
+          console.log(
+            'You really let a computer beat you? Better luck next time.'
+          );
+      };
+    </script>
+  </body>
+</html>
+
+Brute force it player = rock if computer rock then tie scissors then win paper
+then lose player = scissors if computer rock then win scissors then tie paper
+then lose
