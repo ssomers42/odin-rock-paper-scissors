@@ -7,11 +7,29 @@
     <title>Document</title>
   </head>
   <body>
+    <div class="content">
+      <div class="buttons">
+        <button id="rock">ROCK</button>
+        <button id="paper">PAPER</button>
+        <button id="scissors">SCISSORS</button>
+      </div>
+      <div class="results">
+        <p id="results"></p>
+        <p id="score"></p>
+      </div>
+    </div>
     <script>
       // Randomizes computerSelection.
       // Returns rock, paper, or scissors
-      let playerWins;
-      let computerWins;
+      let playerWins = 0;
+      let computerWins = 0;
+
+      const results = document.querySelector('#results');
+      const score = document.querySelector('#score');
+
+      const rockBtn = document.querySelector('#rock');
+      const paperBtn = document.querySelector('#paper');
+      const scissorsBtn = document.querySelector('#scissors');
 
       let computerPlay = () => {
         let randomInt = Math.floor(Math.random() * 3);
@@ -55,18 +73,18 @@
               winner = 'computer';
               break;
           }
-          if (playerSelection == 'scissors') {
-            switch (computerSelection) {
-              case 'rock':
-                winner = 'computer';
-                break;
-              case 'paper':
-                winner = 'player';
-                break;
-              case 'scissors':
-                winner = 'tie';
-                break;
-            }
+        }
+        if (playerSelection == 'scissors') {
+          switch (computerSelection) {
+            case 'rock':
+              winner = 'computer';
+              break;
+            case 'paper':
+              winner = 'player';
+              break;
+            case 'scissors':
+              winner = 'tie';
+              break;
           }
         }
         return announceWinner(playerSelection, computerSelection, winner);
@@ -76,42 +94,54 @@
       // Returns winner in console.
       let announceWinner = (playerSelection, computerSelection, winner) => {
         if (winner == 'player') {
-          console.log(
-            `You win, ${playerSelection} beats ${computerSelection}.`
-          );
-          return playerWins++;
+          results.textContent = `You win, ${playerSelection} beats ${computerSelection}.`;
+          playerWins++;
+          callGame();
+          return;
         }
         if (winner == 'computer') {
-          console.log(
-            `You lose, ${computerSelection} beats ${playerSelection}.`
-          );
-          return computerWins++;
+          results.textContent = `You lose, ${computerSelection} beats ${playerSelection}.`;
+          computerWins++;
+          callGame();
+          return;
         }
+
         if (winner == 'tie') {
-          console.log("It's a tie!");
-        } else console.log("That's not a rock, a paper, or a scissors...");
+          results.textContent = "It's a tie!";
+        } else
+          results.textContent = "That's not a rock, a paper, or a scissors...";
       };
 
-      let game = () => {
-        playerWins = 0;
-        computerWins = 0;
-        while (playerWins < 3 && computerWins < 3) {
-          getWinner(prompt('Rock, Paper, or Scissors?'), computerPlay());
-          console.log(
-            `You have ${playerWins} wins and the computer has ${computerWins}.`
-          );
+      let callGame = () => {
+        console.log(playerWins);
+        console.log(computerWins);
+        if (playerWins < 5 && computerWins < 5) {
+          score.textContent = `You have ${playerWins} wins and the computer has ${computerWins}.`;
+        } else if (playerWins == 5) {
+          alert("Great work, you've won a pointless game.");
+          playerWins = 0;
+          computerWins = 0;
+          score.textContent = '';
+        } else {
+          alert('You really let a computer beat you? Better luck next time.');
+          console.log('else');
+          playerWins = 0;
+          computerWins = 0;
+          score.textContent = '';
         }
-        if ((playerWins = 3)) {
-          console.log("Great work, you've won a pointless game.");
-        } else
-          console.log(
-            'You really let a computer beat you? Better luck next time.'
-          );
       };
+
+      rockBtn.addEventListener('click', () => {
+        getWinner('rock', computerPlay());
+      });
+
+      paperBtn.addEventListener('click', () => {
+        getWinner('paper', computerPlay());
+      });
+
+      scissorsBtn.addEventListener('click', () => {
+        getWinner('scissors', computerPlay());
+      });
     </script>
   </body>
 </html>
-
-Brute force it player = rock if computer rock then tie scissors then win paper
-then lose player = scissors if computer rock then win scissors then tie paper
-then lose
